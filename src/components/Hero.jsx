@@ -84,7 +84,7 @@ export default function Hero() {
         </div>
 
         <p className="hero-description">
-          Passionate developer with <strong>3+ years</strong> of experience building intelligent,
+          Passionate developer with <strong>6 months</strong> of experience building intelligent,
           scalable applications. I blend AI/ML expertise with full-stack development to craft
           solutions that are both smart and beautiful.
         </p>
