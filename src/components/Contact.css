@@ -3,11 +3,35 @@
 .contact-section { background: var(--bg-secondary); position: relative; overflow: hidden; padding-bottom: 0; }
 
 .contact-layout {
-  display: grid; grid-template-columns: 1fr 400px;
+  display: grid; grid-template-columns: minmax(0, 1fr) 360px;
   gap: 2rem; margin-top: 2.5rem; align-items: start;
 }
 
-.contact-cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
+.contact-main { display: flex; flex-direction: column; gap: 1.5rem; min-width: 0; }
+.contact-cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+.message-form { scroll-margin-top: 1rem; }
+.message-form:hover { transform: none; }
+.message-form h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+.message-form > p { color: var(--text-secondary); font-size: 0.9rem; }
+.form-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+.form-field { display: flex; flex-direction: column; gap: 0.4rem; min-width: 0; }
+.form-field-wide { grid-column: 1 / -1; }
+.form-field label { font-size: 0.9rem; font-weight: 600; }
+.form-field input, .form-field textarea {
+  width: 100%; border: 1px solid var(--border-color); border-radius: var(--radius-sm);
+  padding: 0.75rem; font: inherit; color: var(--text-primary); background: var(--bg-primary);
+}
+.form-field textarea { resize: vertical; min-height: 150px; }
+.form-field [aria-invalid="true"] { border-color: var(--accent-pink); }
+.field-error { color: var(--text-primary); font-size: 0.8rem; }
+.form-actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.form-actions button:disabled { opacity: 0.65; cursor: wait; transform: none; }
+.form-email-link, .form-note a { text-decoration: underline; text-underline-offset: 3px; }
+.form-email-link { font-size: 0.85rem; }
+.message-form .form-feedback { min-height: 1.7em; margin-top: 0.75rem; }
+.message-form .feedback-error { color: var(--text-primary); font-weight: 600; }
+.message-form .form-note { font-size: 0.75rem; margin-top: 0.5rem; }
+.form-honeypot { display: none; }
 
 .contact-card-item {
   display: flex; align-items: center; gap: 1rem; padding: 1.5rem;
@@ -119,6 +143,7 @@
 }
 
 @media (max-width: 600px) {
+  .form-fields { grid-template-columns: 1fr; }
   .contact-cards-grid { grid-template-columns: 1fr; }
   .footer-inner { justify-content: center; text-align: center; }
 }

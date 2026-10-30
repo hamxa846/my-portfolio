@@ -7,7 +7,7 @@ const experiences = [
     role: 'Full Stack Developer & AI Engineer Intern',
     company: 'NASTP (National Aerospace Science & Technology Park)',
     location: 'Islamabad, Pakistan',
-    period: '2024 â€“ 2025',
+    period: '2024 - 2025',
     type: 'Internship',
     color: 'cyan',
     achievements: [
@@ -25,7 +25,7 @@ const experiences = [
     role: 'Freelance Full Stack Developer & AI Engineer',
     company: 'Self-Employed (Remote)',
     location: 'Remote',
-    period: '2022 â€“ Present',
+    period: '2022 - Present',
     type: 'Freelance',
     color: 'purple',
     achievements: [

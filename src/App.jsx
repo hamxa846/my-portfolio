@@ -1,5 +1,5 @@
 import './index.css';
-import { ThemeProvider } from './ThemeContext';
+import { ThemeProvider } from './ThemeContext.jsx';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';

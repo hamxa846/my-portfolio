@@ -126,7 +126,7 @@ export default function Projects() {
         </p>
 
         <div className="projects-grid">
-          {projects.map((project, i) => (
+          {projects.map(project => (
             <div
               className={`project-card card ${project.featured ? 'featured-card' : ''} project-${project.color}`}
               key={project.id}
@@ -154,7 +154,7 @@ export default function Projects() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="project-link-btn"
-                      aria-label="Live Demo"
+                      aria-label={`Live demo of ${project.title}`}
                     >
                       <ExternalLink size={16} />
                     </a>
@@ -183,6 +183,20 @@ export default function Projects() {
                   </span>
                 ))}
               </div>
+              {project.links.github && (
+                <div className="project-tags">
+                  <a
+                    href={project.links.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="tag tag-primary"
+                    aria-label={`GitHub profile for ${project.title}`}
+                  >
+                    <FaGithub size={14} aria-hidden="true" />
+                    GitHub profile
+                  </a>
+                </div>
+              )}
             </div>
           ))}
         </div>

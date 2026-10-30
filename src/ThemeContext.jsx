@@ -1,438 +1,42 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { useState, useLayoutEffect } from 'react';
+import { ThemeContext } from './themeContextStore';
+import { themes } from './themes';
+import { readThemePreference, saveThemePreference } from './themeStorage';
 
-export const themes = {
-  'dark-space': {
-    name: "Dark Space",
-    emoji: "🌌",
-    preview: [
-      "#6366f1",
-      "#8b5cf6",
-      "#06b6d4"
-    ],
-    vars: {
-      '--bg-primary': "#050814",
-      '--bg-secondary': "#0a0f1e",
-      '--bg-card': "#0d1427",
-      '--bg-card-hover': "#111a35",
-      '--accent-primary': "#6366f1",
-      '--accent-secondary': "#8b5cf6",
-      '--accent-tertiary': "#06b6d4",
-      '--accent-green': "#10b981",
-      '--accent-pink': "#ec4899",
-      '--accent-orange': "#f59e0b",
-      '--accent-gold': "#f59e0b",
-      '--accent-gold-light': "#fcd34d",
-      '--gradient-primary': "linear-gradient(135deg,#6366f1 0%,#8b5cf6 50%,#06b6d4 100%)",
-      '--gradient-hero': "linear-gradient(135deg,#6366f1 0%,#ec4899 50%,#06b6d4 100%)",
-      '--gradient-gold': "linear-gradient(135deg,#f59e0b 0%,#fcd34d 100%)",
-      '--gradient-card': "linear-gradient(135deg,rgba(99,102,241,0.1) 0%,rgba(139,92,246,0.05) 100%)",
-      '--text-primary': "#f1f5f9",
-      '--text-secondary': "#94a3b8",
-      '--text-muted': "#475569",
-      '--border-color': "rgba(99,102,241,0.2)",
-      '--border-hover': "rgba(99,102,241,0.5)",
-      '--border-gold': "rgba(245,158,11,0.3)",
-      '--shadow-glow': "0 0 40px rgba(99,102,241,0.2)",
-      '--shadow-gold': "0 0 40px rgba(245,158,11,0.15)",
-      '--shadow-card': "0 4px 24px rgba(0,0,0,0.4)",
-      '--shadow-strong': "0 20px 60px rgba(0,0,0,0.6)",
-      '--font-main': "'Space Grotesk', sans-serif",
-      '--font-mono': "'JetBrains Mono', monospace",
-      '--radius-sm': "12px",
-      '--radius-md': "16px",
-      '--radius-lg': "24px",
-      '--radius-xl': "32px",
-      '--radius-full': "9999px",
-      '--bg-pattern': "radial-gradient(circle at center, rgba(99,102,241,0.08) 0%, transparent 100%)",
-      '--bg-size': "100% 100%"
-    }
-  },
-  'crimson-elite': {
-    name: "Crimson Elite",
-    emoji: "🔥",
-    preview: [
-      "#e63946",
-      "#c1121f",
-      "#f4a261"
-    ],
-    vars: {
-      '--bg-primary': "#111318",
-      '--bg-secondary': "#161a20",
-      '--bg-card': "#1c2028",
-      '--bg-card-hover': "#212733",
-      '--accent-primary': "#e63946",
-      '--accent-secondary': "#c1121f",
-      '--accent-tertiary': "#e9c46a",
-      '--accent-green': "#2dc653",
-      '--accent-pink': "#e63946",
-      '--accent-orange': "#f4a261",
-      '--accent-gold': "#f4a261",
-      '--accent-gold-light': "#ffd166",
-      '--gradient-primary': "linear-gradient(135deg,#e63946 0%,#c1121f 50%,#f4a261 100%)",
-      '--gradient-hero': "linear-gradient(135deg,#e63946 0%,#9b2226 40%,#f4a261 100%)",
-      '--gradient-gold': "linear-gradient(135deg,#f4a261 0%,#ffd166 100%)",
-      '--gradient-card': "linear-gradient(135deg,rgba(230,57,70,0.07) 0%,rgba(244,162,97,0.03) 100%)",
-      '--text-primary': "#f1f3f8",
-      '--text-secondary': "#adb5bd",
-      '--text-muted': "#6c757d",
-      '--border-color': "rgba(230,57,70,0.18)",
-      '--border-hover': "rgba(230,57,70,0.5)",
-      '--border-gold': "rgba(244,162,97,0.35)",
-      '--shadow-glow': "0 0 40px rgba(230,57,70,0.18)",
-      '--shadow-gold': "0 0 40px rgba(244,162,97,0.15)",
-      '--shadow-card': "0 4px 28px rgba(0,0,0,0.45)",
-      '--shadow-strong': "0 20px 60px rgba(0,0,0,0.6)",
-      '--font-main': "'Inter', sans-serif",
-      '--font-mono': "'JetBrains Mono', monospace",
-      '--radius-sm': "0px",
-      '--radius-md': "0px",
-      '--radius-lg': "0px",
-      '--radius-xl': "0px",
-      '--radius-full': "0px",
-      '--bg-pattern': "none",
-      '--bg-size': "auto"
-    }
-  },
-  'ocean-depth': {
-    name: "Ocean Depth",
-    emoji: "🌊",
-    preview: [
-      "#0ea5e9",
-      "#0284c7",
-      "#38bdf8"
-    ],
-    vars: {
-      '--bg-primary': "#030d1a",
-      '--bg-secondary': "#061525",
-      '--bg-card': "#0a1f35",
-      '--bg-card-hover': "#0e2840",
-      '--accent-primary': "#0ea5e9",
-      '--accent-secondary': "#0284c7",
-      '--accent-tertiary': "#38bdf8",
-      '--accent-green': "#10b981",
-      '--accent-pink': "#818cf8",
-      '--accent-orange': "#f59e0b",
-      '--accent-gold': "#38bdf8",
-      '--accent-gold-light': "#7dd3fc",
-      '--gradient-primary': "linear-gradient(135deg,#0ea5e9 0%,#0284c7 50%,#38bdf8 100%)",
-      '--gradient-hero': "linear-gradient(135deg,#0ea5e9 0%,#0369a1 40%,#818cf8 100%)",
-      '--gradient-gold': "linear-gradient(135deg,#38bdf8 0%,#7dd3fc 100%)",
-      '--gradient-card': "linear-gradient(135deg,rgba(14,165,233,0.1) 0%,rgba(56,189,248,0.04) 100%)",
-      '--text-primary': "#e0f2fe",
-      '--text-secondary': "#7fb9d9",
-      '--text-muted': "#3d7a9c",
-      '--border-color': "rgba(14,165,233,0.2)",
-      '--border-hover': "rgba(14,165,233,0.5)",
-      '--border-gold': "rgba(56,189,248,0.3)",
-      '--shadow-glow': "0 0 40px rgba(14,165,233,0.2)",
-      '--shadow-gold': "0 0 40px rgba(56,189,248,0.15)",
-      '--shadow-card': "0 4px 24px rgba(0,0,0,0.5)",
-      '--shadow-strong': "0 20px 60px rgba(0,0,0,0.7)",
-      '--font-main': "'Outfit', sans-serif",
-      '--font-mono': "'JetBrains Mono', monospace",
-      '--radius-sm': "8px",
-      '--radius-md': "16px",
-      '--radius-lg': "24px",
-      '--radius-xl': "40px",
-      '--radius-full': "9999px",
-      '--bg-pattern': "linear-gradient(180deg, #030d1a 0%, #061525 100%)",
-      '--bg-size': "100% 100%"
-    }
-  },
-  'emerald-luxury': {
-    name: "Emerald Luxury",
-    emoji: "💎",
-    preview: [
-      "#059669",
-      "#10b981",
-      "#d4a017"
-    ],
-    vars: {
-      '--bg-primary': "#061412",
-      '--bg-secondary': "#0a1e1a",
-      '--bg-card': "#0d2720",
-      '--bg-card-hover': "#113228",
-      '--accent-primary': "#059669",
-      '--accent-secondary': "#047857",
-      '--accent-tertiary': "#d4a017",
-      '--accent-green': "#34d399",
-      '--accent-pink': "#f0abfc",
-      '--accent-orange': "#d4a017",
-      '--accent-gold': "#d4a017",
-      '--accent-gold-light': "#fcd34d",
-      '--gradient-primary': "linear-gradient(135deg,#059669 0%,#047857 50%,#d4a017 100%)",
-      '--gradient-hero': "linear-gradient(135deg,#059669 0%,#065f46 40%,#d4a017 100%)",
-      '--gradient-gold': "linear-gradient(135deg,#d4a017 0%,#fcd34d 100%)",
-      '--gradient-card': "linear-gradient(135deg,rgba(5,150,105,0.1) 0%,rgba(212,160,23,0.04) 100%)",
-      '--text-primary': "#ecfdf5",
-      '--text-secondary': "#6ee7b7",
-      '--text-muted': "#2d6a4f",
-      '--border-color': "rgba(5,150,105,0.22)",
-      '--border-hover': "rgba(5,150,105,0.5)",
-      '--border-gold': "rgba(212,160,23,0.35)",
-      '--shadow-glow': "0 0 40px rgba(5,150,105,0.2)",
-      '--shadow-gold': "0 0 40px rgba(212,160,23,0.15)",
-      '--shadow-card': "0 4px 24px rgba(0,0,0,0.5)",
-      '--shadow-strong': "0 20px 60px rgba(0,0,0,0.65)",
-      '--font-main': "'Playfair Display', serif",
-      '--font-mono': "'JetBrains Mono', monospace",
-      '--radius-sm': "4px",
-      '--radius-md': "8px",
-      '--radius-lg': "12px",
-      '--radius-xl': "20px",
-      '--radius-full': "9999px",
-      '--bg-pattern': "repeating-linear-gradient(45deg, rgba(5,150,105,0.02) 0px, rgba(5,150,105,0.02) 2px, transparent 2px, transparent 10px)",
-      '--bg-size': "auto"
-    }
-  },
-  cyberpunk: {
-    name: "Cyberpunk",
-    emoji: "⚡",
-    preview: [
-      "#f0e040",
-      "#9b59b6",
-      "#00ffff"
-    ],
-    vars: {
-      '--bg-primary': "#0d0d0f",
-      '--bg-secondary': "#121217",
-      '--bg-card': "#18181f",
-      '--bg-card-hover': "#1e1e28",
-      '--accent-primary': "#f0e040",
-      '--accent-secondary': "#9b59b6",
-      '--accent-tertiary': "#00e5ff",
-      '--accent-green': "#39ff14",
-      '--accent-pink': "#ff2079",
-      '--accent-orange': "#ff6b00",
-      '--accent-gold': "#f0e040",
-      '--accent-gold-light': "#fff176",
-      '--gradient-primary': "linear-gradient(135deg,#f0e040 0%,#ff2079 50%,#00e5ff 100%)",
-      '--gradient-hero': "linear-gradient(135deg,#f0e040 0%,#9b59b6 50%,#00e5ff 100%)",
-      '--gradient-gold': "linear-gradient(135deg,#f0e040 0%,#fff176 100%)",
-      '--gradient-card': "linear-gradient(135deg,rgba(240,224,64,0.07) 0%,rgba(0,229,255,0.03) 100%)",
-      '--text-primary': "#f0f0ff",
-      '--text-secondary': "#a0a0c0",
-      '--text-muted': "#505068",
-      '--border-color': "rgba(240,224,64,0.18)",
-      '--border-hover': "rgba(240,224,64,0.5)",
-      '--border-gold': "rgba(0,229,255,0.3)",
-      '--shadow-glow': "0 0 40px rgba(240,224,64,0.15)",
-      '--shadow-gold': "0 0 40px rgba(0,229,255,0.15)",
-      '--shadow-card': "0 4px 24px rgba(0,0,0,0.6)",
-      '--shadow-strong': "0 20px 60px rgba(0,0,0,0.75)",
-      '--font-main': "'Orbitron', sans-serif",
-      '--font-mono': "'JetBrains Mono', monospace",
-      '--radius-sm': "0px",
-      '--radius-md': "2px",
-      '--radius-lg': "4px",
-      '--radius-xl': "8px",
-      '--radius-full': "0px",
-      '--bg-pattern': "linear-gradient(0deg, transparent 24%, rgba(0, 229, 255, 0.05) 25%, rgba(0, 229, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 229, 255, 0.05) 75%, rgba(0, 229, 255, 0.05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(0, 229, 255, 0.05) 25%, rgba(0, 229, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 229, 255, 0.05) 75%, rgba(0, 229, 255, 0.05) 76%, transparent 77%, transparent)",
-      '--bg-size': "50px 50px"
-    }
-  },
-  'corporate-light': {
-    name: "Corporate Light",
-    emoji: "💼",
-    preview: [
-      "#0f172a",
-      "#3b82f6",
-      "#f8fafc"
-    ],
-    vars: {
-      '--bg-primary': "#f8fafc",
-      '--bg-secondary': "#f1f5f9",
-      '--bg-card': "#ffffff",
-      '--bg-card-hover': "#f8fafc",
-      '--accent-primary': "#3b82f6",
-      '--accent-secondary': "#2563eb",
-      '--accent-tertiary': "#0ea5e9",
-      '--accent-green': "#10b981",
-      '--accent-pink': "#ec4899",
-      '--accent-orange': "#f59e0b",
-      '--accent-gold': "#eab308",
-      '--accent-gold-light': "#fde047",
-      '--gradient-primary': "linear-gradient(135deg,#3b82f6 0%,#2563eb 50%,#0ea5e9 100%)",
-      '--gradient-hero': "linear-gradient(135deg,#3b82f6 0%,#4f46e5 40%,#0ea5e9 100%)",
-      '--gradient-gold': "linear-gradient(135deg,#eab308 0%,#fde047 100%)",
-      '--gradient-card': "linear-gradient(135deg,rgba(59,130,246,0.05) 0%,rgba(14,165,233,0.02) 100%)",
-      '--text-primary': "#0f172a",
-      '--text-secondary': "#334155",
-      '--text-muted': "#64748b",
-      '--border-color': "rgba(15,23,42,0.1)",
-      '--border-hover': "rgba(59,130,246,0.3)",
-      '--border-gold': "rgba(234,179,8,0.3)",
-      '--shadow-glow': "0 0 20px rgba(59,130,246,0.15)",
-      '--shadow-gold': "0 0 20px rgba(234,179,8,0.15)",
-      '--shadow-card': "0 4px 15px rgba(0,0,0,0.05)",
-      '--shadow-strong': "0 10px 30px rgba(0,0,0,0.08)",
-      '--font-main': "'Roboto', sans-serif",
-      '--font-mono': "'JetBrains Mono', monospace",
-      '--radius-sm': "4px",
-      '--radius-md': "8px",
-      '--radius-lg': "12px",
-      '--radius-xl': "16px",
-      '--radius-full': "9999px",
-      '--bg-pattern': "none",
-      '--bg-size': "auto"
-    }
-  },
-  'minimal-nord': {
-    name: "Minimal Nord",
-    emoji: "❄️",
-    preview: [
-      "#eceff4",
-      "#5e81ac",
-      "#88c0d0"
-    ],
-    vars: {
-      '--bg-primary': "#eceff4",
-      '--bg-secondary': "#e5e9f0",
-      '--bg-card': "#ffffff",
-      '--bg-card-hover': "#f4f6f9",
-      '--accent-primary': "#5e81ac",
-      '--accent-secondary': "#81a1c1",
-      '--accent-tertiary': "#88c0d0",
-      '--accent-green': "#a3be8c",
-      '--accent-pink': "#b48ead",
-      '--accent-orange': "#d08770",
-      '--accent-gold': "#ebcb8b",
-      '--accent-gold-light': "#f1dbaf",
-      '--gradient-primary': "linear-gradient(135deg,#5e81ac 0%,#81a1c1 50%,#88c0d0 100%)",
-      '--gradient-hero': "linear-gradient(135deg,#5e81ac 0%,#b48ead 40%,#88c0d0 100%)",
-      '--gradient-gold': "linear-gradient(135deg,#ebcb8b 0%,#f1dbaf 100%)",
-      '--gradient-card': "linear-gradient(135deg,rgba(94,129,172,0.05) 0%,rgba(136,192,208,0.02) 100%)",
-      '--text-primary': "#2e3440",
-      '--text-secondary': "#434c5e",
-      '--text-muted': "#4c566a",
-      '--border-color': "rgba(46,52,64,0.1)",
-      '--border-hover': "rgba(94,129,172,0.3)",
-      '--border-gold': "rgba(235,203,139,0.3)",
-      '--shadow-glow': "0 0 20px rgba(94,129,172,0.15)",
-      '--shadow-gold': "0 0 20px rgba(235,203,139,0.15)",
-      '--shadow-card': "0 4px 15px rgba(46,52,64,0.05)",
-      '--shadow-strong': "0 10px 30px rgba(46,52,64,0.08)",
-      '--font-main': "'Fira Sans', sans-serif",
-      '--font-mono': "'JetBrains Mono', monospace",
-      '--radius-sm': "6px",
-      '--radius-md': "10px",
-      '--radius-lg': "16px",
-      '--radius-xl': "24px",
-      '--radius-full': "9999px",
-      '--bg-pattern': "radial-gradient(rgba(94,129,172,0.1) 1px, transparent 1px)",
-      '--bg-size': "20px 20px"
-    }
-  },
-  'mint-breeze': {
-    name: "Mint Breeze",
-    emoji: "🍃",
-    preview: [
-      "#f0fdf4",
-      "#16a34a",
-      "#14b8a6"
-    ],
-    vars: {
-      '--bg-primary': "#f0fdf4",
-      '--bg-secondary': "#dcfce7",
-      '--bg-card': "#ffffff",
-      '--bg-card-hover': "#f0fdf4",
-      '--accent-primary': "#16a34a",
-      '--accent-secondary': "#15803d",
-      '--accent-tertiary': "#14b8a6",
-      '--accent-green': "#22c55e",
-      '--accent-pink': "#d946ef",
-      '--accent-orange': "#f97316",
-      '--accent-gold': "#f59e0b",
-      '--accent-gold-light': "#fde047",
-      '--gradient-primary': "linear-gradient(135deg,#16a34a 0%,#15803d 50%,#14b8a6 100%)",
-      '--gradient-hero': "linear-gradient(135deg,#16a34a 0%,#064e3b 40%,#14b8a6 100%)",
-      '--gradient-gold': "linear-gradient(135deg,#f59e0b 0%,#fde047 100%)",
-      '--gradient-card': "linear-gradient(135deg,rgba(22,163,74,0.05) 0%,rgba(20,184,166,0.02) 100%)",
-      '--text-primary': "#064e3b",
-      '--text-secondary': "#065f46",
-      '--text-muted': "#1f2937",
-      '--border-color': "rgba(6,78,59,0.1)",
-      '--border-hover': "rgba(22,163,74,0.3)",
-      '--border-gold': "rgba(245,158,11,0.3)",
-      '--shadow-glow': "0 0 20px rgba(22,163,74,0.15)",
-      '--shadow-gold': "0 0 20px rgba(245,158,11,0.15)",
-      '--shadow-card': "0 4px 15px rgba(6,78,59,0.05)",
-      '--shadow-strong': "0 10px 30px rgba(6,78,59,0.08)",
-      '--font-main': "'Quicksand', sans-serif",
-      '--font-mono': "'JetBrains Mono', monospace",
-      '--radius-sm': "16px",
-      '--radius-md': "24px",
-      '--radius-lg': "32px",
-      '--radius-xl': "48px",
-      '--radius-full': "9999px",
-      '--bg-pattern': "none",
-      '--bg-size': "auto"
-    }
-  },
-  'executive-monochrome': {
-    name: "Executive Mono",
-    emoji: "🏛️",
-    preview: [
-      "#f8f9fa",
-      "#212529",
-      "#902923"
-    ],
-    vars: {
-      '--bg-primary': "#f8f9fa",
-      '--bg-secondary': "#e9ecef",
-      '--bg-card': "#ffffff",
-      '--bg-card-hover': "#f8f9fa",
-      '--accent-primary': "#212529",
-      '--accent-secondary': "#343a40",
-      '--accent-tertiary': "#902923",
-      '--accent-green': "#38b000",
-      '--accent-pink': "#c9184a",
-      '--accent-orange': "#e85d04",
-      '--accent-gold': "#ccff33",
-      '--accent-gold-light': "#d4d700",
-      '--gradient-primary': "linear-gradient(135deg,#212529 0%,#343a40 50%,#902923 100%)",
-      '--gradient-hero': "linear-gradient(135deg,#212529 0%,#495057 40%,#902923 100%)",
-      '--gradient-gold': "linear-gradient(135deg,#902923 0%,#e07a5f 100%)",
-      '--gradient-card': "linear-gradient(135deg,rgba(33,37,41,0.05) 0%,rgba(144,41,35,0.02) 100%)",
-      '--text-primary': "#121212",
-      '--text-secondary': "#495057",
-      '--text-muted': "#6c757d",
-      '--border-color': "rgba(33,37,41,0.1)",
-      '--border-hover': "rgba(33,37,41,0.3)",
-      '--border-gold': "rgba(144,41,35,0.3)",
-      '--shadow-glow': "0 0 20px rgba(33,37,41,0.15)",
-      '--shadow-gold': "0 0 20px rgba(144,41,35,0.15)",
-      '--shadow-card': "0 4px 15px rgba(33,37,41,0.05)",
-      '--shadow-strong': "0 10px 30px rgba(33,37,41,0.08)",
-      '--font-main': "Arial, sans-serif",
-      '--font-mono': "'Courier New', monospace",
-      '--radius-sm': "0px",
-      '--radius-md': "0px",
-      '--radius-lg': "0px",
-      '--radius-xl': "0px",
-      '--radius-full': "0px",
-      '--bg-pattern': "none",
-      '--bg-size': "auto"
-    }
-  }
+const themeFonts = {
+  'crimson-elite': 'Inter:wght@400;500;600;700;800;900',
+  'ocean-depth': 'Outfit:wght@400;500;600;700;800;900',
+  'emerald-luxury': 'Playfair+Display:wght@400;500;600;700;800;900',
+  cyberpunk: 'Orbitron:wght@400;500;600;700;800;900',
+  'corporate-light': 'Roboto:wght@400;500;600;700;800;900',
+  'minimal-nord': 'Fira+Sans:wght@400;500;600;700;800;900',
+  'mint-breeze': 'Quicksand:wght@400;500;600;700',
 };
 
-
-const ThemeContext = createContext(null);
+function loadThemeFont(themeKey) {
+  const family = themeFonts[themeKey];
+  if (!family || document.getElementById(`theme-font-${themeKey}`)) return;
+  const stylesheet = document.createElement('link');
+  stylesheet.id = `theme-font-${themeKey}`;
+  stylesheet.rel = 'stylesheet';
+  stylesheet.href = `https://fonts.googleapis.com/css2?family=${family}&display=swap`;
+  document.head.append(stylesheet);
+}
 
 export function ThemeProvider({ children }) {
-  const [themeKey, setThemeKey] = useState(
-    () => localStorage.getItem('portfolio-theme') || 'dark-space'
-  );
+  const [themeKey, setThemeKey] = useState(() => readThemePreference(themes));
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const theme = themes[themeKey];
-    if (!theme) return;
     const root = document.documentElement;
     Object.entries(theme.vars).forEach(([prop, val]) => {
       root.style.setProperty(prop, val);
     });
-    localStorage.setItem('portfolio-theme', themeKey);
+    root.dataset.theme = themeKey;
+    root.style.colorScheme = themeKey === 'corporate-light' || themeKey === 'minimal-nord' ||
+      themeKey === 'mint-breeze' || themeKey === 'executive-monochrome' ? 'light' : 'dark';
+    loadThemeFont(themeKey);
+    saveThemePreference(themeKey);
   }, [themeKey]);
 
   return (
@@ -440,8 +44,4 @@ export function ThemeProvider({ children }) {
       {children}
     </ThemeContext.Provider>
   );
-}
-
-export function useTheme() {
-  return useContext(ThemeContext);
 }

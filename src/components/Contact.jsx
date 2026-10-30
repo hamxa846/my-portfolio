@@ -1,5 +1,6 @@
 import { Mail, Phone, MapPin, Send, MessageCircle } from 'lucide-react';
-import { FaGithub, FaLinkedin } from 'react-icons/fa';
+import { FaGithub } from 'react-icons/fa';
+import ContactForm from './ContactForm';
 import './Contact.css';
 
 const contactCards = [
@@ -18,14 +19,6 @@ const contactCards = [
     href: 'tel:+923475923031',
     color: 'purple',
     id: 'contact-phone-card',
-  },
-  {
-    icon: <FaLinkedin size={22} />,
-    label: 'LinkedIn',
-    value: 'linkedin.com/in/hamzakhan-361964248',
-    href: 'https://linkedin.com/in/hamzakhan-361964248',
-    color: 'blue',
-    id: 'contact-linkedin-card',
   },
   {
     icon: <FaGithub size={22} />,
@@ -50,12 +43,13 @@ export default function Contact() {
         <h2 className="section-title">Let's Work Together</h2>
         <div className="section-divider" />
         <p className="section-subtitle">
-          Whether you have a project in mind, an opportunity to discuss, or just want to say hello â€”
+          Whether you have a project in mind, an opportunity to discuss, or just want to say hello,
           I'm always open to a conversation. Reach out and let's build something great.
         </p>
 
         <div className="contact-layout">
           {/* Contact Cards */}
+          <div className="contact-main">
           <div className="contact-cards-grid">
             {contactCards.map(card => (
               <a
@@ -73,6 +67,9 @@ export default function Contact() {
                 </div>
               </a>
             ))}
+          </div>
+
+          <ContactForm />
           </div>
 
           {/* Availability Panel */}
@@ -102,13 +99,18 @@ export default function Contact() {
 
             <div className="avail-location">
               <MapPin size={15} />
-              <span>Islamabad, Pakistan Â· Remote Worldwide</span>
+              <span>Islamabad, Pakistan | Remote Worldwide</span>
             </div>
 
             <a
-              href="mailto:hk202502@gmail.com"
+              href="#message-form"
               className="btn btn-primary avail-cta"
               id="contact-hire-btn"
+              onClick={event => {
+                event.preventDefault();
+                document.getElementById('message-form')?.scrollIntoView({ block: 'start' });
+                document.getElementById('message-name')?.focus({ preventScroll: true });
+              }}
             >
               <Send size={16} />
               Send Me a Message
@@ -131,9 +133,6 @@ export default function Contact() {
           <div className="footer-links">
             <a href="https://github.com/hamxa846" target="_blank" rel="noopener noreferrer" className="footer-icon" aria-label="GitHub">
               <FaGithub size={18} />
-            </a>
-            <a href="https://linkedin.com/in/hamzakhan-361964248" target="_blank" rel="noopener noreferrer" className="footer-icon" aria-label="LinkedIn">
-              <FaLinkedin size={18} />
             </a>
             <a href="mailto:hk202502@gmail.com" className="footer-icon" aria-label="Email">
               <Mail size={18} />

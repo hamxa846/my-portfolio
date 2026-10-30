@@ -1,6 +1,5 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
 import { User, MapPin, Mail, Phone, Globe, Zap, Target, Heart } from 'lucide-react';
-import { FaGithub, FaLinkedin } from 'react-icons/fa';
+import { FaGithub } from 'react-icons/fa';
 import './About.css';
 import profilePic from '../assets/Hamza.png';
 
@@ -14,7 +13,7 @@ const highlights = [
   {
     icon: <Target size={22} />,
     title: 'Full Stack Mastery',
-    description: 'End-to-end web development with React, Node.js, Django, and FastAPI â€” from UI to database.',
+    description: 'End-to-end web development with React, Node.js, Django, and FastAPI, from UI to database.',
     color: 'purple',
   },
   {
@@ -29,52 +28,10 @@ const contactInfo = [
   { icon: <MapPin size={16} />, label: 'Islamabad, Pakistan' },
   { icon: <Mail size={16} />, label: 'hk202502@gmail.com', href: 'mailto:hk202502@gmail.com' },
   { icon: <Phone size={16} />, label: '+92 347 5923031', href: 'tel:+923475923031' },
-  { icon: <FaLinkedin size={16} />, label: 'linkedin.com/in/hamzakhan-361964248', href: 'https://linkedin.com/in/hamzakhan-361964248' },
   { icon: <FaGithub size={16} />, label: 'hamxa846', href: 'https://github.com/hamxa846' },
 ];
 
 export default function About() {
-  // Avatar positioning state
-  const [bgPos, setBgPos] = useState({ x: 50, y: 50 });
-  const [isDragging, setIsDragging] = useState(false);
-  const startPosRef = useRef({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const saved = localStorage.getItem('portfolio-avatar-pos');
-    if (saved) {
-      try {
-        setBgPos(JSON.parse(saved));
-      } catch (e) {}
-    }
-  }, []);
-
-  const handlePointerDown = (e) => {
-    setIsDragging(true);
-    startPosRef.current = { x: e.clientX, y: e.clientY };
-    e.target.setPointerCapture(e.pointerId);
-  };
-
-  const handlePointerMove = useCallback((e) => {
-    if (!isDragging) return;
-    const dx = e.clientX - startPosRef.current.x;
-    const dy = e.clientY - startPosRef.current.y;
-    
-    setBgPos(prev => {
-      // 0.2 sensitivity multiplier
-      const newX = Math.max(0, Math.min(100, prev.x - dx * 0.2));
-      const newY = Math.max(0, Math.min(100, prev.y - dy * 0.2));
-      return { x: newX, y: newY };
-    });
-    
-    startPosRef.current = { x: e.clientX, y: e.clientY };
-  }, [isDragging]);
-
-  const handlePointerUp = useCallback((e) => {
-    setIsDragging(false);
-    e.target.releasePointerCapture(e.pointerId);
-    localStorage.setItem('portfolio-avatar-pos', JSON.stringify(bgPos));
-  }, [bgPos]);
-
   return (
     <section className="section about-section" id="about">
       <div className="container">
@@ -93,16 +50,14 @@ export default function About() {
             <div className="avatar-wrapper">
               <div className="avatar-ring" />
               <div className="avatar-inner">
-                <img 
-                  src={profilePic} 
-                  alt="Hamza Tariq" 
-                  className="avatar-img" 
-                  style={{ objectPosition: `${bgPos.x}% ${bgPos.y}%` }}
-                  onPointerDown={handlePointerDown}
-                  onPointerMove={handlePointerMove}
-                  onPointerUp={handlePointerUp}
-                  onPointerCancel={handlePointerUp}
-                  draggable={false}
+                <img
+                  src={profilePic}
+                  alt="Hamza Tariq"
+                  className="avatar-img"
+                  width={1023}
+                  height={1537}
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
               <div className="avatar-badge">
@@ -136,11 +91,11 @@ export default function About() {
               <p>
                 I'm <strong>Hamza Tariq</strong>, a versatile software engineer based in Islamabad, Pakistan,
                 with over <strong>3 years of experience</strong> spanning both AI/ML engineering and full-stack
-                web development. I hold a Bachelor's degree in <strong>Artificial Intelligence</strong> from
+                web development. I hold a <strong>Bachelor of Science in Computer Science</strong> from
                 Air University, Islamabad.
               </p>
               <p>
-                My unique dual expertise allows me to build <strong>intelligent, end-to-end applications</strong> â€”
+                My unique dual expertise allows me to build <strong>intelligent, end-to-end applications</strong>,
                 from designing React-powered frontends to deploying machine learning models in production.
                 I'm proficient in the entire development lifecycle: requirements gathering, architecture design,
                 implementation, and deployment on cloud platforms.

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ArrowDown, Sparkles, Code2, Brain, Mail, Phone } from 'lucide-react';
-import { FaGithub, FaLinkedin } from 'react-icons/fa';
+import { FaGithub } from 'react-icons/fa';
 import './Hero.css';
 
 const TYPING_ROLES = [
@@ -12,12 +12,28 @@ const TYPING_ROLES = [
 ];
 
 export default function Hero() {
-  const [displayed, setDisplayed] = useState('');
   const [roleIdx, setRoleIdx] = useState(0);
   const [charIdx, setCharIdx] = useState(0);
   const [deleting, setDeleting] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(
+    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
+  const [visible, setVisible] = useState(() => !document.hidden);
 
   useEffect(() => {
+    const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const onMotionChange = event => setReducedMotion(event.matches);
+    const onVisibilityChange = () => setVisible(!document.hidden);
+    preference.addEventListener('change', onMotionChange);
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    return () => {
+      preference.removeEventListener('change', onMotionChange);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (reducedMotion || !visible) return;
     const current = TYPING_ROLES[roleIdx];
     let timeout;
 
@@ -32,9 +48,10 @@ export default function Hero() {
       setRoleIdx(i => (i + 1) % TYPING_ROLES.length);
     }
 
-    setDisplayed(current.slice(0, charIdx));
     return () => clearTimeout(timeout);
-  }, [charIdx, deleting, roleIdx]);
+  }, [charIdx, deleting, roleIdx, reducedMotion, visible]);
+
+  const displayed = reducedMotion ? 'Full Stack Developer' : TYPING_ROLES[roleIdx].slice(0, charIdx);
 
   return (
     <section className="hero" id="hero">
@@ -60,8 +77,9 @@ export default function Hero() {
 
         {/* Typing effect */}
         <div className="hero-role">
-          <Code2 size={20} className="role-icon" />
-          <span className="typed-text">{displayed}</span>
+          <span className="sr-only">AI Engineer and Full Stack Developer</span>
+          <Code2 size={20} className="role-icon" aria-hidden="true" />
+          <span className="typed-text" aria-hidden="true">{displayed}</span>
           <span className="cursor" aria-hidden="true">|</span>
         </div>
 
@@ -78,8 +96,13 @@ export default function Hero() {
             View My Work
           </a>
           <a
-            href="mailto:hk202502@gmail.com"
+            href="#message-form"
             className="btn btn-outline"
+            onClick={event => {
+              event.preventDefault();
+              document.getElementById('message-form')?.scrollIntoView({ block: 'start' });
+              document.getElementById('message-name')?.focus({ preventScroll: true });
+            }}
           >
             <Mail size={18} />
             Get In Touch
@@ -97,16 +120,6 @@ export default function Hero() {
             id="hero-github"
           >
             <FaGithub size={20} />
-          </a>
-          <a
-            href="https://linkedin.com/in/hamzakhan-361964248"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="social-link"
-            aria-label="LinkedIn"
-            id="hero-linkedin"
-          >
-            <FaLinkedin size={20} />
           </a>
           <a
             href="mailto:hk202502@gmail.com"
