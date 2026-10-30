@@ -90,7 +90,7 @@ export default function About() {
             <div className="about-bio">
               <p>
                 I'm <strong>Hamza Tariq</strong>, a versatile software engineer based in Islamabad, Pakistan,
-                with over <strong>3 years of experience</strong> spanning both AI/ML engineering and full-stack
+                with over <strong>6 Months of experience</strong> spanning both AI/ML engineering and full-stack
                 web development. I hold a <strong>Bachelor of Science in Computer Science</strong> from
                 Air University, Islamabad.
               </p>
