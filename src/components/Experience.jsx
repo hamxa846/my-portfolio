@@ -6,7 +6,7 @@ const experiences = [
     id: 'nastp',
     role: 'Full Stack Developer & AI Engineer Intern',
     company: 'NASTP (National Aerospace Science & Technology Park)',
-    location: 'Islamabad, Pakistan',
+    location: 'Kamra, Pakistan',
     period: '2024 - 2025',
     type: 'Internship',
     color: 'cyan',

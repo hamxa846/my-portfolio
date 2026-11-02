@@ -1,4 +1,4 @@
-import { GraduationCap, Calendar, MapPin, School } from 'lucide-react';
+import { GraduationCap, Calendar, School } from 'lucide-react';
 import './Education.css';
 
 const education = [
@@ -6,7 +6,6 @@ const education = [
     id: 'air-university',
     degree: 'Bachelor of Science in Computer Science',
     institution: 'Air University',
-    location: 'Islamabad, Pakistan',
     period: '2022 - 2026',
     color: 'cyan',
   },
@@ -41,10 +40,7 @@ export default function Education() {
                   <School size={15} aria-hidden="true" />
                   <strong>{edu.institution}</strong>
                 </div>
-                <div className="edu-location">
-                  <MapPin size={13} aria-hidden="true" />
-                  {edu.location}
-                </div>
+
               </div>
             </div>
           ))}

@@ -36,7 +36,7 @@
   background: var(--gradient-hero);
   display: flex; align-items: center; justify-content: center;
   position: relative; z-index: 1;
-  box-shadow: 0 0 60px rgba(230,57,70,0.4);
+  box-shadow: 0 0 50px rgba(129,140,248,0.25);
   overflow: hidden;
 }
 
@@ -57,11 +57,11 @@
   border-radius: 50%;
   background: conic-gradient(
     from 0deg,
-    var(--accent-primary),
-    var(--accent-gold),
-    var(--accent-tertiary),
-    var(--accent-secondary),
-    var(--accent-primary)
+    #a5b4fc,
+    #c4b5fd,
+    #67e8f9,
+    #c4b5fd,
+    #a5b4fc
   );
   animation: borderRotate 4s linear infinite;
   z-index: 0;

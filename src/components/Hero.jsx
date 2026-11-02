@@ -142,9 +142,9 @@ export default function Hero() {
         {/* Stats row */}
         <div className="hero-stats">
           {[
-            { value: '3+', label: 'Years Experience' },
+            { value: '06', label: 'Months Experience' },
             { value: '5+', label: 'Projects Built' },
-            { value: '2', label: 'Expert Domains' },
+            { value: '02', label: 'Expert Domains' },
             { value: '15+', label: 'Technologies' },
           ].map(stat => (
             <div className="hero-stat" key={stat.label}>
